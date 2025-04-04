@@ -1,0 +1,23 @@
+{
+  "name": "advanced-sw",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hala-Abu-Musallam/Advanced-SW.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Hala-Abu-Musallam/Advanced-SW/issues"
+  },
+  "homepage": "https://github.com/Hala-Abu-Musallam/Advanced-SW#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
