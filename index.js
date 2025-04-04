@@ -8,5 +8,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server hala on http://localhost:${PORT}`);
+  console.log(`Server hala Rawan on http://localhost:${PORT}`);
 });
