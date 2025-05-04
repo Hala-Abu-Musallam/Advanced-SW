@@ -18,11 +18,6 @@ app.get('/', (req, res) => {
   res.send('🚀 Welcome to HopeConnect API!');
 });
 
-<<<<<<< HEAD
-app.listen(PORT, () => {
-  console.log(`Server hala Rawan israa on http://localhost:${PORT}`);
-});
-=======
 // الاتصال بقاعدة البيانات وبدء السيرفر
 sequelize.authenticate()
   .then(() => {
@@ -37,4 +32,3 @@ sequelize.authenticate()
   .catch(err => {
     console.error('❌ Unable to connect to the database:', err);
   });
->>>>>>> Hala
