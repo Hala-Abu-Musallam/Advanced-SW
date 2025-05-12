@@ -1,6 +1,6 @@
 const { Sequelize } = require('sequelize');
 
-const sequelize = new Sequelize('hopeconnect', 'root', 'root', {
+const sequelize = new Sequelize('hopeconnect', 'root', 'advancedsoftware', {
     host: 'localhost',
     dialect: 'mysql',
     logging: false

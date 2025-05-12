@@ -9,11 +9,11 @@
             "server": "localhost",
             "port": 33060,
             "driver": "MySQL",
-            "name": "MySQL Local",
+            "name": " MySQL Local",
             "database": "hopeconnect",
             "username": "root",
-            "password": "root",
-            "connectionTimeout": 30
+            "password": "advancedsoftware",
+            "connectionTimeout": 20
         }
     ]
 }
