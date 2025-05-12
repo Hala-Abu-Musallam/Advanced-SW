@@ -2,19 +2,26 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const sequelize = require('../database');
 const saltRounds = 10;
-const JWT_SECRET = process.env.JWT_SECRET || 'your_secret_key'; // استخدم .env في الإنتاج
+const JWT_SECRET = process.env.JWT_SECRET || 'Payment123456'; // استخدم .env في الإنتاج
 
+// تسجيل الدخول
 // تسجيل الدخول
 exports.login = async (req, res) => {
     const { username, password } = req.body;
 
+    // التحقق من صحة المدخلات
+    if (!username || !password) {
+        return res.status(400).json({
+            success: false,
+            message: 'Username and password are required'
+        });
+    }
+
     try {
-        const [users] = await sequelize.query('SELECT * FROM users WHERE username = ?', {
+        const [user] = await sequelize.query('SELECT * FROM users WHERE username = ? LIMIT 1', {
             replacements: [username],
             type: sequelize.QueryTypes.SELECT
         });
-
-        const user = users[0];
 
         if (!user) {
             return res.status(401).json({
@@ -24,7 +31,6 @@ exports.login = async (req, res) => {
         }
 
         const match = await bcrypt.compare(password, user.password);
-
         if (!match) {
             return res.status(401).json({
                 success: false,
@@ -63,7 +69,11 @@ exports.login = async (req, res) => {
         });
     } catch (error) {
         console.error('Error during login:', error);
-        res.status(500).json({ success: false, message: 'An error occurred, please try again later' });
+        res.status(500).json({ 
+            success: false, 
+            message: 'An error occurred, please try again later',
+            error: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
     }
 };
 
