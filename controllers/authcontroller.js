@@ -2,41 +2,39 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const sequelize = require('../database');
 const saltRounds = 10;
-const JWT_SECRET = process.env.JWT_SECRET || 'your_secret_key'; // استخدم .env في الإنتاج
+const JWT_SECRET = process.env.JWT_SECRET || '2002';
 
 // تسجيل الدخول
 exports.login = async (req, res) => {
     const { username, password } = req.body;
 
     try {
-        const [users] = await sequelize.query('SELECT * FROM users WHERE username = ?', {
-            replacements: [username],
-            type: sequelize.QueryTypes.SELECT
-        });
+        const [users] = await sequelize.query(
+            'SELECT * FROM users WHERE username = ?',
+            {
+                replacements: [username],
+                type: sequelize.QueryTypes.SELECT
+            }
+        );
 
-        const user = users[0];
+        const user = users;
 
         if (!user) {
-            return res.status(401).json({
-                success: false,
-                message: 'Invalid username or password'
-            });
+            return res.status(401).json({ success: false, message: 'Invalid username or password' });
         }
 
         const match = await bcrypt.compare(password, user.password);
-
         if (!match) {
-            return res.status(401).json({
-                success: false,
-                message: 'Invalid username or password'
-            });
+            return res.status(401).json({ success: false, message: 'Invalid username or password' });
         }
 
-        // جلب الدور
-        const [roles] = await sequelize.query('SELECT role_name FROM userroles WHERE username = ?', {
-            replacements: [username],
-            type: sequelize.QueryTypes.SELECT
-        });
+        const roles = await sequelize.query(
+            'SELECT role_name FROM userroles WHERE username = ?',
+            {
+                replacements: [username],
+                type: sequelize.QueryTypes.SELECT
+            }
+        );
 
         const role = roles.length > 0 ? roles[0].role_name : null;
 
@@ -63,7 +61,7 @@ exports.login = async (req, res) => {
         });
     } catch (error) {
         console.error('Error during login:', error);
-        res.status(500).json({ success: false, message: 'An error occurred, please try again later' });
+        res.status(500).json({ success: false, message: 'An error occurred' });
     }
 };
 
@@ -72,7 +70,7 @@ exports.signup = async (req, res) => {
     const { username, email, password, role_name, description } = req.body;
 
     try {
-        const [existingUsers] = await sequelize.query(
+        const existingUsers = await sequelize.query(
             'SELECT * FROM users WHERE username = ? OR email = ?',
             {
                 replacements: [username, email],
@@ -80,10 +78,8 @@ exports.signup = async (req, res) => {
             }
         );
 
-        if (existingUsers && existingUsers.length > 0) {
-            const existingUser = existingUsers.find(
-                user => user.username === username || user.email === email
-            );
+        if (existingUsers.length > 0) {
+            const existingUser = existingUsers[0];
             if (existingUser.username === username) {
                 return res.status(400).json({ success: false, message: 'Username already exists' });
             } else {
@@ -127,6 +123,6 @@ exports.signup = async (req, res) => {
         });
     } catch (error) {
         console.error('Error during signup:', error);
-        res.status(500).json({ success: false, message: 'An error occurred, please try again later' });
+        res.status(500).json({ success: false, message: 'An error occurred' });
     }
 };

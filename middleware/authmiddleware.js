@@ -3,29 +3,19 @@ const JWT_SECRET = process.env.JWT_SECRET || '2002';
 
 const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
-
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(401).json({ message: 'Access token missing or malformed' });
+        return res.status(401).json({ message: 'Token missing or malformed' });
     }
 
     const token = authHeader.split(' ')[1];
 
     try {
         const decoded = jwt.verify(token, JWT_SECRET);
-        req.user = decoded; // نرسل بيانات المستخدم لباقي الراوتات
+        req.user = decoded;
         next();
-    } catch (error) {
+    } catch (err) {
         return res.status(403).json({ message: 'Invalid or expired token' });
     }
 };
 
-// للتأكد من أنه أدمن
-const isAdmin = (req, res, next) => {
-    if (req.user && req.user.role === 'admin') {
-        next();
-    } else {
-        return res.status(403).json({ message: 'Admin access required' });
-    }
-};
-
-module.exports = { authenticateToken, isAdmin };
+module.exports = { authenticateToken };
