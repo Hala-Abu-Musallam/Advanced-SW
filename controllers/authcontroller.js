@@ -2,7 +2,11 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const sequelize = require('../database');
 const saltRounds = 10;
+<<<<<<< HEAD
 const JWT_SECRET = process.env.JWT_SECRET || 'Payment123456'; // استخدم .env في الإنتاج
+=======
+const JWT_SECRET = process.env.JWT_SECRET || '2002';
+>>>>>>> eec90ec574e9b9d9a1126c4d70f4bbedfcff62b5
 
 // تسجيل الدخول
 // تسجيل الدخول
@@ -18,34 +22,46 @@ exports.login = async (req, res) => {
     }
 
     try {
+<<<<<<< HEAD
         const [user] = await sequelize.query('SELECT * FROM users WHERE username = ? LIMIT 1', {
             replacements: [username],
             type: sequelize.QueryTypes.SELECT
         });
 
+=======
+        // جلب المستخدم
+        const users = await sequelize.query(
+            'SELECT * FROM users WHERE username = ?',
+            {
+                replacements: [username],
+                type: sequelize.QueryTypes.SELECT
+            }
+        );
+
+        const user = users[0];
+>>>>>>> eec90ec574e9b9d9a1126c4d70f4bbedfcff62b5
         if (!user) {
-            return res.status(401).json({
-                success: false,
-                message: 'Invalid username or password'
-            });
+            return res.status(401).json({ success: false, message: 'Invalid username or password' });
         }
 
+        // تحقق من كلمة المرور
         const match = await bcrypt.compare(password, user.password);
         if (!match) {
-            return res.status(401).json({
-                success: false,
-                message: 'Invalid username or password'
-            });
+            return res.status(401).json({ success: false, message: 'Invalid username or password' });
         }
 
-        // جلب الدور
-        const [roles] = await sequelize.query('SELECT role_name FROM userroles WHERE username = ?', {
-            replacements: [username],
-            type: sequelize.QueryTypes.SELECT
-        });
+        // جلب الدور من جدول userroles
+        const roles = await sequelize.query(
+            'SELECT role_name FROM userroles WHERE username = ?',
+            {
+                replacements: [username],
+                type: sequelize.QueryTypes.SELECT
+            }
+        );
 
         const role = roles.length > 0 ? roles[0].role_name : null;
 
+        // إنشاء التوكن
         const token = jwt.sign(
             {
                 ID: user.ID,
@@ -67,13 +83,18 @@ exports.login = async (req, res) => {
                 role
             }
         });
+
     } catch (error) {
         console.error('Error during login:', error);
+<<<<<<< HEAD
         res.status(500).json({ 
             success: false, 
             message: 'An error occurred, please try again later',
             error: process.env.NODE_ENV === 'development' ? error.message : undefined
         });
+=======
+        res.status(500).json({ success: false, message: 'An error occurred during login' });
+>>>>>>> eec90ec574e9b9d9a1126c4d70f4bbedfcff62b5
     }
 };
 
@@ -82,7 +103,7 @@ exports.signup = async (req, res) => {
     const { username, email, password, role_name, description } = req.body;
 
     try {
-        const [existingUsers] = await sequelize.query(
+        const existingUsers = await sequelize.query(
             'SELECT * FROM users WHERE username = ? OR email = ?',
             {
                 replacements: [username, email],
@@ -90,10 +111,8 @@ exports.signup = async (req, res) => {
             }
         );
 
-        if (existingUsers && existingUsers.length > 0) {
-            const existingUser = existingUsers.find(
-                user => user.username === username || user.email === email
-            );
+        if (existingUsers.length > 0) {
+            const existingUser = existingUsers[0];
             if (existingUser.username === username) {
                 return res.status(400).json({ success: false, message: 'Username already exists' });
             } else {
@@ -103,6 +122,7 @@ exports.signup = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
+        // إضافة المستخدم
         await sequelize.query(
             'INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
             {
@@ -111,6 +131,7 @@ exports.signup = async (req, res) => {
             }
         );
 
+        // إضافة الدور للمستخدم
         await sequelize.query(
             'INSERT INTO userroles (username, role_name, description) VALUES (?, ?, ?)',
             {
@@ -119,8 +140,13 @@ exports.signup = async (req, res) => {
             }
         );
 
+        // إنشاء التوكن بعد التسجيل
         const token = jwt.sign(
-            { username, email, role: role_name },
+            {
+                username,
+                email,
+                role: role_name
+            },
             JWT_SECRET,
             { expiresIn: '1h' }
         );
@@ -135,8 +161,9 @@ exports.signup = async (req, res) => {
                 role: role_name
             }
         });
+
     } catch (error) {
         console.error('Error during signup:', error);
-        res.status(500).json({ success: false, message: 'An error occurred, please try again later' });
+        res.status(500).json({ success: false, message: 'An error occurred during signup' });
     }
 };

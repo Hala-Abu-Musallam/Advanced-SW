@@ -1,7 +1,9 @@
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT || 8081;
+const dotenv = require('dotenv');
+dotenv.config();
 
+<<<<<<< HEAD
 // 1. الاتصال بقاعدة البيانات
 const sequelize = require('./database');
 require('dotenv').config();
@@ -17,19 +19,28 @@ const paymentRoutes = require('./routes/paymentRoutes');
 
 
 // 4. Middleware الأساسية
+=======
+>>>>>>> eec90ec574e9b9d9a1126c4d70f4bbedfcff62b5
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+<<<<<<< HEAD
 // 5. الروتات
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/payments', paymentRoutes);
 
 // 6. راوت الاختبار
+=======
+const authRoutes = require('./routes/authroutes');
+const adminRoutes = require('./routes/adminroutes');
+
+>>>>>>> eec90ec574e9b9d9a1126c4d70f4bbedfcff62b5
 app.get('/', (req, res) => {
-  res.send('🚀 Welcome to HopeConnect API!');
+    res.send('💡 HopeConnect API is running');
 });
 
+<<<<<<< HEAD
 // 7. معالجة الأخطاء (يجب أن تكون في النهاية)
 app.use((err, req, res, next) => {
   console.error(err.stack);
@@ -61,3 +72,17 @@ async function startServer() {
 }
 
 startServer();
+=======
+app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes);
+
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ message: 'Internal Server Error' });
+});
+
+const PORT = process.env.PORT || 8081;
+app.listen(PORT, () => {
+    console.log(`✅ Server running at http://localhost:${PORT}`);
+});
+>>>>>>> eec90ec574e9b9d9a1126c4d70f4bbedfcff62b5

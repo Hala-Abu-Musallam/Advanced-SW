@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -23,7 +24,12 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.14.0",
+<<<<<<< HEAD
     "sequelize": "^6.37.7",
     "stripe": "^18.1.0"
+=======
+    "nodemon": "^3.1.9",
+    "sequelize": "^6.37.7"
+>>>>>>> eec90ec574e9b9d9a1126c4d70f4bbedfcff62b5
   }
 }
