@@ -9,7 +9,8 @@ exports.login = async (req, res) => {
     const { username, password } = req.body;
 
     try {
-        const [users] = await sequelize.query(
+        // جلب المستخدم
+        const users = await sequelize.query(
             'SELECT * FROM users WHERE username = ?',
             {
                 replacements: [username],
@@ -17,17 +18,18 @@ exports.login = async (req, res) => {
             }
         );
 
-        const user = users;
-
+        const user = users[0];
         if (!user) {
             return res.status(401).json({ success: false, message: 'Invalid username or password' });
         }
 
+        // تحقق من كلمة المرور
         const match = await bcrypt.compare(password, user.password);
         if (!match) {
             return res.status(401).json({ success: false, message: 'Invalid username or password' });
         }
 
+        // جلب الدور من جدول userroles
         const roles = await sequelize.query(
             'SELECT role_name FROM userroles WHERE username = ?',
             {
@@ -38,6 +40,7 @@ exports.login = async (req, res) => {
 
         const role = roles.length > 0 ? roles[0].role_name : null;
 
+        // إنشاء التوكن
         const token = jwt.sign(
             {
                 ID: user.ID,
@@ -59,9 +62,10 @@ exports.login = async (req, res) => {
                 role
             }
         });
+
     } catch (error) {
         console.error('Error during login:', error);
-        res.status(500).json({ success: false, message: 'An error occurred' });
+        res.status(500).json({ success: false, message: 'An error occurred during login' });
     }
 };
 
@@ -89,6 +93,7 @@ exports.signup = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
+        // إضافة المستخدم
         await sequelize.query(
             'INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
             {
@@ -97,6 +102,7 @@ exports.signup = async (req, res) => {
             }
         );
 
+        // إضافة الدور للمستخدم
         await sequelize.query(
             'INSERT INTO userroles (username, role_name, description) VALUES (?, ?, ?)',
             {
@@ -105,8 +111,13 @@ exports.signup = async (req, res) => {
             }
         );
 
+        // إنشاء التوكن بعد التسجيل
         const token = jwt.sign(
-            { username, email, role: role_name },
+            {
+                username,
+                email,
+                role: role_name
+            },
             JWT_SECRET,
             { expiresIn: '1h' }
         );
@@ -121,8 +132,9 @@ exports.signup = async (req, res) => {
                 role: role_name
             }
         });
+
     } catch (error) {
         console.error('Error during signup:', error);
-        res.status(500).json({ success: false, message: 'An error occurred' });
+        res.status(500).json({ success: false, message: 'An error occurred during signup' });
     }
 };

@@ -10,14 +10,20 @@ const UserRole = sequelize.define('UserRole', {
   },
   username: {
     type: DataTypes.STRING(50),
-    allowNull: false
+    allowNull: false,
+    references: {
+      model: User,
+      key: 'username'
+    },
+    onDelete: 'CASCADE'
   },
   role_name: {
     type: DataTypes.STRING(50),
     allowNull: false
   },
   description: {
-    type: DataTypes.TEXT
+    type: DataTypes.TEXT,
+    allowNull: true
   },
   created_at: {
     type: DataTypes.DATE,
@@ -28,7 +34,7 @@ const UserRole = sequelize.define('UserRole', {
   timestamps: false
 });
 
-// علاقة بين UserRole و User
+// علاقة One-to-One بين User ↔ UserRole
 User.hasOne(UserRole, { foreignKey: 'username', sourceKey: 'username' });
 UserRole.belongsTo(User, { foreignKey: 'username', targetKey: 'username' });
 
