@@ -1,7 +1,6 @@
 const Payment = require('../models/payment');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const sequelize = require('../database'); // ✅ هذا هو التعديل المطلوب
-// ⚡️ Webhook من Stripe
+const sequelize = require('../database');
 exports.handleWebhook = (req, res) => {
   const sig = req.headers['stripe-signature'];
   let event;
@@ -17,7 +16,6 @@ exports.handleWebhook = (req, res) => {
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
-  // التعامل مع الأحداث
   switch (event.type) {
     case 'payment_intent.succeeded':
       const paymentIntent = event.data.object;
@@ -45,7 +43,6 @@ exports.handleWebhook = (req, res) => {
 };
 
 
-// ✅ إنشاء PaymentIntent فقط (مسار /create-intent)
 exports.createPaymentIntent = async (req, res) => {
   const { amount, currency, payment_method } = req.body;
 
@@ -73,11 +70,10 @@ exports.createPaymentIntent = async (req, res) => {
 };
 
 
-// ✅ جلب الدفعات للمستخدم الحالي
 exports.getPayments = async (req, res) => {
   try {
     const payments = await Payment.findAll({
-      where: { user_id: req.user.ID } // ✅ عدلناها من id إلى ID
+      where: { user_id: req.user.ID } 
     });
 
     res.json({ success: true, data: payments });
@@ -91,7 +87,6 @@ exports.getPayments = async (req, res) => {
 };
 
 
-// ✅ تعديل دفعة
 exports.updatePayment = async (req, res) => {
   try {
     const { amount, currency, status } = req.body;
@@ -117,7 +112,6 @@ exports.updatePayment = async (req, res) => {
   }
 };
 
-// ✅ حذف دفعة
 exports.deletePayment = async (req, res) => {
   try {
     const payment = await Payment.findByPk(req.params.id);
@@ -136,7 +130,6 @@ exports.deletePayment = async (req, res) => {
   }
 };
 
-// 📊 إحصائيات الدفع
 exports.getPaymentStats = async (req, res) => {
   try {
     const stats = await Payment.findAll({

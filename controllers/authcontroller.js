@@ -2,33 +2,13 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const sequelize = require('../database');
 const saltRounds = 10;
-<<<<<<< HEAD
-const JWT_SECRET = process.env.JWT_SECRET || 'Payment123456'; // استخدم .env في الإنتاج
-=======
 const JWT_SECRET = process.env.JWT_SECRET || '2002';
->>>>>>> eec90ec574e9b9d9a1126c4d70f4bbedfcff62b5
 
-// تسجيل الدخول
 // تسجيل الدخول
 exports.login = async (req, res) => {
     const { username, password } = req.body;
 
-    // التحقق من صحة المدخلات
-    if (!username || !password) {
-        return res.status(400).json({
-            success: false,
-            message: 'Username and password are required'
-        });
-    }
-
     try {
-<<<<<<< HEAD
-        const [user] = await sequelize.query('SELECT * FROM users WHERE username = ? LIMIT 1', {
-            replacements: [username],
-            type: sequelize.QueryTypes.SELECT
-        });
-
-=======
         // جلب المستخدم
         const users = await sequelize.query(
             'SELECT * FROM users WHERE username = ?',
@@ -39,7 +19,6 @@ exports.login = async (req, res) => {
         );
 
         const user = users[0];
->>>>>>> eec90ec574e9b9d9a1126c4d70f4bbedfcff62b5
         if (!user) {
             return res.status(401).json({ success: false, message: 'Invalid username or password' });
         }
@@ -86,15 +65,7 @@ exports.login = async (req, res) => {
 
     } catch (error) {
         console.error('Error during login:', error);
-<<<<<<< HEAD
-        res.status(500).json({ 
-            success: false, 
-            message: 'An error occurred, please try again later',
-            error: process.env.NODE_ENV === 'development' ? error.message : undefined
-        });
-=======
         res.status(500).json({ success: false, message: 'An error occurred during login' });
->>>>>>> eec90ec574e9b9d9a1126c4d70f4bbedfcff62b5
     }
 };
 

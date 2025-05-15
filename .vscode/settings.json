@@ -12,7 +12,7 @@
             "name": "MySQL Local",
             "database": "hopeconnect",
             "username": "root",
-            "password": "root",
+            "password": "advancedsoftware",
             "connectionTimeout": 30
         }
     ]

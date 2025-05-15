@@ -20,16 +20,13 @@
   "homepage": "https://github.com/Hala-Abu-Musallam/Advanced-SW#readme",
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.2",
     "mysql2": "^3.14.0",
-<<<<<<< HEAD
-    "sequelize": "^6.37.7",
-    "stripe": "^18.1.0"
-=======
     "nodemon": "^3.1.9",
     "sequelize": "^6.37.7"
->>>>>>> eec90ec574e9b9d9a1126c4d70f4bbedfcff62b5
   }
 }
