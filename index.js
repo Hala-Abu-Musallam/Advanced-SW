@@ -24,7 +24,7 @@ app.use((err, req, res, next) => {
 });
 
 // مزامنة الجدول ثم تشغيل السيرفر
-Logistics.sequelize.sync()
+Logistics.sequelize.sync({ alter: true }) // Use alter to update schema
   .then(() => {
     const PORT = process.env.PORT || 8081;
     app.listen(PORT, () => {
