@@ -34,7 +34,6 @@ const UserRole = sequelize.define('UserRole', {
   timestamps: false
 });
 
-// علاقة One-to-One بين User ↔ UserRole
 User.hasOne(UserRole, { foreignKey: 'username', sourceKey: 'username' });
 UserRole.belongsTo(User, { foreignKey: 'username', targetKey: 'username' });
 

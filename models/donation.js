@@ -6,10 +6,10 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true
       },
       user_id: DataTypes.INTEGER,
-      type: DataTypes.STRING, // مثلا: 'money', 'clothes', 'food'
+      type: DataTypes.STRING, 
       amount: DataTypes.FLOAT,
-      category: DataTypes.STRING, // مثلا: 'general', 'education', 'medical'
-      status: DataTypes.STRING // مثلا: 'pending', 'delivered'
+      category: DataTypes.STRING, 
+      status: DataTypes.STRING 
     }, {
       tableName: 'donations',
       timestamps: true

@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 'admin'
     }
   }, {
-    tableName: 'admins'  // تأكد من أن اسم الجدول صحيح
+    tableName: 'admins'  
   });
 
   return Admin;

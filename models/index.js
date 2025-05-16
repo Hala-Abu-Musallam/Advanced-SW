@@ -1,19 +1,18 @@
-const { Sequelize } = require('sequelize');
-const AdminModel = require('./admin');  // استيراد نموذج Admin من داخل مجلد modules
+const { Sequelize, DataTypes } = require('sequelize');
+const path = require('path');
 
-// إعداد الاتصال بقاعدة البيانات
-const sequelize = new Sequelize(
-  process.env.DB_NAME,  // اسم قاعدة البيانات من .env
-  process.env.DB_USER,  // اسم المستخدم من .env
-  process.env.DB_PASSWORD,  // كلمة المرور من .env
-  {
-    host: process.env.DB_HOST,  // المضيف من .env
-    dialect: 'mysql',  // نوع قاعدة البيانات (مثال: MySQL)
-  }
-);
+// ✅ استدعاء ملف الاتصال من مجلد أعلى
+const sequelize = require(path.join(__dirname, '..', 'database'));
 
-// تعريف النماذج
-const Admin = AdminModel(sequelize, Sequelize.DataTypes);
+const db = {};
+db.Sequelize = Sequelize;
+db.sequelize = sequelize;
 
-// تصدير الاتصال والنماذج
-module.exports = { sequelize, Admin };
+db.Trust = require('./trust')(sequelize, DataTypes);
+db.Review = require('./review')(sequelize, DataTypes);
+
+// ✅ العلاقات
+db.Trust.hasMany(db.Review, { foreignKey: 'trustId', onDelete: 'CASCADE' });
+db.Review.belongsTo(db.Trust, { foreignKey: 'trustId' });
+
+module.exports = db;

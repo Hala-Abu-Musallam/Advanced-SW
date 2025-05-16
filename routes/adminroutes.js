@@ -4,8 +4,8 @@ const adminController = require('../controllers/admincontroller');
 const { authenticateToken } = require('../middlewares/authMiddleware');
 const verifyAdmin = require('../middlewares/adminMiddleware');
 
-router.use(authenticateToken); // تحقق من التوكن
-router.use(verifyAdmin);       // تحقق من أنه admin
+router.use(authenticateToken); 
+router.use(verifyAdmin);       
 
 router.get('/users', adminController.getAllUsers);
 router.delete('/users/:id', adminController.deleteUser);

@@ -1,20 +1,31 @@
-module.exports = (sequelize, DataTypes) => {
-    const Volunteer = sequelize.define('Volunteer', {
-      id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-      },
-      user_id: DataTypes.INTEGER,
-      skill: DataTypes.STRING,
-      availability: DataTypes.STRING,
-      description: DataTypes.TEXT
-    }, {
-      tableName: 'volunteers',
-      timestamps: false
-    });
-  
-    return Volunteer;
-  };
+const { DataTypes } = require('sequelize');
+const  sequelize  = require('../database');
 
-  
+const Volunteer = sequelize.define('Volunteer', {
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true
+  },
+  phone: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  skills: {
+    type: DataTypes.TEXT,
+    allowNull: false
+  },
+  availability: {
+    type: DataTypes.STRING,
+    allowNull: false
+  }
+}, {
+  tableName: 'volunteers',
+  timestamps: false
+});
+
+module.exports = Volunteer;
