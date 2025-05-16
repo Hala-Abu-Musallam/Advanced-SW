@@ -1,7 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
-const Logistics = require('./models/logistics'); // استيراد موديل لوجيستكس (للمزامنة)
+const Logistics = require('./models/logistics'); 
 const logisticsRoutes = require('./routes/logisticsRoutes');
 
 dotenv.config();
@@ -17,14 +17,12 @@ app.get('/', (req, res) => {
   res.send('💡 HopeConnect API is running');
 });
 
-// خطأ عام
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: 'Internal Server Error' });
 });
 
-// مزامنة الجدول ثم تشغيل السيرفر
-Logistics.sequelize.sync({ alter: true }) // Use alter to update schema
+Logistics.sequelize.sync({ alter: true }) 
   .then(() => {
     const PORT = process.env.PORT || 8081;
     app.listen(PORT, () => {

@@ -1,4 +1,3 @@
-// File: models/logistics.js
 const sequelize = require('../database');
 const { DataTypes } = require('sequelize');
 
@@ -41,7 +40,7 @@ const Logistics = sequelize.define("Logistics", {
   },
   deliverySchedule: {
     type: DataTypes.JSON,
-    allowNull: true, // Stores pickup and delivery time slots, e.g., { pickup: "2025-05-17T10:00:00Z", delivery: "2025-05-17T14:00:00Z" }
+    allowNull: true, 
   },
 });
 

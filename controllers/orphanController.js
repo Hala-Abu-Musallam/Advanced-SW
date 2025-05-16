@@ -1,21 +1,16 @@
 const Orphan = require('../models/orphan');
-
-// --- [ Orphan CRUD Operations ] ---
-
 exports.createOrphan = (req, res) => {
   Orphan.create(req.body, (err, result) => {
     if (err) return res.status(500).json({ error: err.message });
     res.status(201).json(result);
   });
 };
-
 exports.getAllOrphans = (req, res) => {
   Orphan.getAll((err, results) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json(results);
   });
 };
-
 exports.getOrphanById = (req, res) => {
   const orphanId = req.params.id;
   Orphan.getById(orphanId, (err, result) => {
@@ -24,7 +19,6 @@ exports.getOrphanById = (req, res) => {
     res.json(result);
   });
 };
-
 exports.updateOrphan = (req, res) => {
   const orphanId = req.params.id;
   Orphan.update(orphanId, req.body, (err, result) => {
@@ -40,9 +34,6 @@ exports.deleteOrphan = (req, res) => {
     res.json({ message: "Orphan deleted" });
   });
 };
-
-// --- [ Sponsorship Request Operations ] ---
-
 exports.createSponsorshipRequest = (req, res) => {
   const { orphan_id, sponsor_name, sponsor_email, message } = req.body;
 

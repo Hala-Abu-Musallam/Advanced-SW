@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../database'); // تأكد أن هذا الملف فيه إعداد الاتصال بالـ Sequelize
+const sequelize = require('../database'); 
 
 const Orphan = sequelize.define('Orphan', {
   id: {
@@ -26,14 +26,14 @@ const Orphan = sequelize.define('Orphan', {
     type: DataTypes.STRING
   },
   image: {
-    type: DataTypes.STRING // رابط صورة اليتيم
+    type: DataTypes.STRING 
   }
 }, {
   tableName: 'orphans',
-  timestamps: true // لو بدك createdAt و updatedAt
+  timestamps: true 
 });
 
-// موديل طلبات الكفالة
+
 Orphan.createSponsorshipRequest = (requestData, callback) => {
   const query = "INSERT INTO sponsorship_requests (orphan_id, sponsor_name, sponsor_email, message) VALUES (?, ?, ?, ?)";
   sequelize.query(query, { replacements: [requestData.orphan_id, requestData.sponsor_name, requestData.sponsor_email, requestData.message] })
