@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const adminController = require('../controllers/admincontroller');
-const { authenticateToken } = require('../middlewares/authmiddleware');
-const verifyAdmin = require('../middlewares/adminmiddleware');
+const { authenticateToken } = require('../middleware/authmiddleware');
+const verifyAdmin = require('../middleware/adminmiddleware');
 
-router.use(authenticateToken); // تحقق من التوكن
-router.use(verifyAdmin);       // تحقق من أنه admin
+router.use(authenticateToken); 
+router.use(verifyAdmin);       
 
 router.get('/users', adminController.getAllUsers);
 router.delete('/users/:id', adminController.deleteUser);
