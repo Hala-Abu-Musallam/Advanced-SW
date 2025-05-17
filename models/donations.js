@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../database');
-const User = require('./user'); 
+const User = require('./user');
 
 const Donation = sequelize.define('Donations', {
   id: {
@@ -25,6 +25,10 @@ const Donation = sequelize.define('Donations', {
     type: DataTypes.FLOAT,
     defaultValue: 0
   },
+  platform_fee: { // ✅ الحقل الجديد لحساب الربح
+    type: DataTypes.FLOAT,
+    defaultValue: 0
+  },
   category: {
     type: DataTypes.STRING(50)
   },
@@ -38,10 +42,18 @@ const Donation = sequelize.define('Donations', {
   }
 }, {
   tableName: 'donations',
-  timestamps: false
+  timestamps: false,
+
+  hooks: {
+    beforeCreate: (donation) => {
+      // ✅ احسبي 2% تلقائياً
+      const fee = parseFloat((donation.amount * 0.02).toFixed(2));
+      donation.platform_fee = fee;
+    }
+  }
 });
 
-
+// علاقات الربط
 Donation.belongsTo(User, { foreignKey: 'user_id' });
 User.hasMany(Donation, { foreignKey: 'user_id' });
 
