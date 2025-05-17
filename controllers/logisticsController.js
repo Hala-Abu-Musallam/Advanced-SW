@@ -2,10 +2,9 @@ const Logistics = require('../models/logistics');
 const path = require('path');
 const multer = require('multer');
 
-// إعداد multer لتخزين الصور في مجلد uploads
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/');  // تأكد أن المجلد موجود عندك
+    cb(null, 'uploads/');  
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -15,19 +14,16 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// Middleware لرفع صورة واحدة تحت المفتاح 'image'
 exports.uploadImage = upload.single('image');
 
 exports.createLogisticsRequest = async (req, res) => {
   try {
     const data = req.body;
 
-    // إذا تم رفع صورة، خزّن مسارها
     if (req.file) {
-      data.imageUrl = req.file.path;  // المسار النسبي للصورة
+      data.imageUrl = req.file.path;  
     }
 
-    // Validate deliverySchedule if provided
     if (data.deliverySchedule) {
       try {
         data.deliverySchedule = JSON.parse(data.deliverySchedule);

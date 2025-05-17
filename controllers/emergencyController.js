@@ -4,7 +4,6 @@ const EmergencyCampaignModel = require("../models/EmergencyCampaign");
 
 const EmergencyCampaign = EmergencyCampaignModel(sequelize, DataTypes);
 
-// تقديم حملة طارئة جديدة
 exports.createCampaign = async (req, res) => {
   try {
     const newCampaign = await EmergencyCampaign.create(req.body);
@@ -14,7 +13,6 @@ exports.createCampaign = async (req, res) => {
   }
 };
 
-// عرض كل الحملات الطارئة
 exports.getAllCampaigns = async (req, res) => {
   try {
     const campaigns = await EmergencyCampaign.findAll({ order: [["createdAt", "DESC"]] });
@@ -24,7 +22,6 @@ exports.getAllCampaigns = async (req, res) => {
   }
 };
 
-// عرض حملة طارئة حسب الـ ID
 exports.getCampaignById = async (req, res) => {
   try {
     const campaign = await EmergencyCampaign.findByPk(req.params.id);
@@ -35,7 +32,6 @@ exports.getCampaignById = async (req, res) => {
   }
 };
 
-// تحديث بيانات الحملة
 exports.updateCampaign = async (req, res) => {
   try {
     const { id } = req.params;
@@ -57,7 +53,6 @@ exports.updateCampaign = async (req, res) => {
   }
 };
 
-// التبرع لحملة طارئة
 exports.donateToCampaign = async (req, res) => {
   try {
     const { amount } = req.body;
@@ -78,7 +73,6 @@ exports.donateToCampaign = async (req, res) => {
   }
 };
 
-// إيقاف الحملة
 exports.deactivateCampaign = async (req, res) => {
   try {
     const campaign = await EmergencyCampaign.findByPk(req.params.id);
