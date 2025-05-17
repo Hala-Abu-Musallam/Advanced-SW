@@ -1,6 +1,6 @@
 const sequelize = require('../database');
 
-// Get all users with their roles
+
 exports.getAllUsers = async (req, res) => {
   try {
     const users = await sequelize.query(`
@@ -26,7 +26,7 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
-// Delete user by ID
+
 exports.deleteUser = async (req, res) => {
   const { id } = req.params;
 
