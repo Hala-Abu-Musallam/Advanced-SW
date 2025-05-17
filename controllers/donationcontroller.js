@@ -1,6 +1,6 @@
 const sequelize = require('../database');
 
-// 📌 1. إنشاء تبرع جديد (donor فقط)
+
 exports.createDonation = async (req, res) => {
     const { type, amount, category } = req.body;
     const userId = req.user?.ID;
@@ -26,7 +26,6 @@ exports.createDonation = async (req, res) => {
   };
   
 
-// 📌 2. عرض تبرعات المستخدم الحالي
 exports.getMyDonations = async (req, res) => {
   const userId = req.user.ID;
 
@@ -46,7 +45,6 @@ exports.getMyDonations = async (req, res) => {
   }
 };
 
-// 📌 3. عرض كل التبرعات (admin فقط)
 exports.getAllDonations = async (req, res) => {
   try {
     const donations = await sequelize.query(`
