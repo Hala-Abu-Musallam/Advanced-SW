@@ -13,6 +13,7 @@ sequelize.sync()
 app.use(express.json());
 
 const trustRoutes = require('./routes/trustRoutes');
+
 app.use('/api/trust', trustRoutes);
 
 app.get('/', (req, res) => {
