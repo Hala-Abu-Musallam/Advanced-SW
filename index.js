@@ -37,7 +37,6 @@ const volunteerRoutes = require('./routes/volunteer');
 const notificationRoutes = require('./routes/notificationRoutes');
 const requestRoutes = require('./routes/requestRoutes');
 const logisticsRoutes = require('./routes/logisticsRoutes');
-
 // Use routes
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
