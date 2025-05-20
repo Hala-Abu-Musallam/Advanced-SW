@@ -53,7 +53,6 @@ const Payment = sequelize.define('Payment', {
   timestamps: true
 });
 
-// ✅ العلاقة بين Payment و User
 Payment.belongsTo(User, { foreignKey: 'user_id' });
 User.hasMany(Payment, { foreignKey: 'user_id' });
 

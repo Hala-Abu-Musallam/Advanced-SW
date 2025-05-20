@@ -41,7 +41,6 @@ exports.deleteUser = async (req, res) => {
   }
 };
 
-// عرض تقرير الشفافية الكامل
 exports.getTransparencyReport = async (req, res) => {
   try {
     const results = await sequelize.query(`
@@ -64,7 +63,7 @@ exports.getTransparencyReport = async (req, res) => {
 
     res.status(200).json(results);
   } catch (error) {
-    console.error('❌ Transparency fetch error:', error.message);
+    console.error('Transparency fetch error:', error.message);
     res.status(500).json({ message: 'Failed to fetch transparency report' });
   }
 };

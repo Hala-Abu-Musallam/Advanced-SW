@@ -1,4 +1,3 @@
-// models/Revenue.js
 module.exports = (sequelize, DataTypes) => {
     const Revenue = sequelize.define('Revenue', {
       id: {

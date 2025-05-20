@@ -1,12 +1,11 @@
 const sequelize = require('../database');
-const Donation = require('../models/donations'); // ✅ استدعاء الموديل
+const Donation = require('../models/donations');
 
-// ✅ إنشاء تبرع (مع تفعيل hooks)
 exports.createDonation = async (req, res) => {
   const { type, amount, category } = req.body;
   const userId = req.user?.ID;
 
-  console.log('📥 Incoming donation:', { user_id: userId, type, amount, category });
+  console.log(' Incoming donation:', { user_id: userId, type, amount, category });
 
   try {
     const result = await Donation.create({
@@ -16,16 +15,15 @@ exports.createDonation = async (req, res) => {
       category
     });
 
-    console.log('✅ Donation created:', result.dataValues);
+    console.log('Donation created:', result.dataValues);
 
     res.status(201).json({ message: 'Donation created successfully' });
   } catch (error) {
-    console.error('❌ Donation insert error:', error.message);
+    console.error(' Donation insert error:', error.message);
     res.status(500).json({ message: 'Failed to create donation' });
   }
 };
 
-// ✅ جلب تبرعات المستخدم الحالي فقط
 exports.getMyDonations = async (req, res) => {
   const userId = req.user.ID;
 
@@ -40,12 +38,11 @@ exports.getMyDonations = async (req, res) => {
 
     res.status(200).json(donations);
   } catch (error) {
-    console.error('❌ Error fetching user donations:', error);
+    console.error(' Error fetching user donations:', error);
     res.status(500).json({ message: 'Failed to fetch your donations' });
   }
 };
 
-// ✅ جلب كل التبرعات مع بيانات المستخدم (صلاحية admin)
 exports.getAllDonations = async (req, res) => {
   try {
     const donations = await sequelize.query(`
@@ -60,7 +57,7 @@ exports.getAllDonations = async (req, res) => {
 
     res.status(200).json(donations);
   } catch (error) {
-    console.error('❌ Error fetching all donations:', error);
+    console.error(' Error fetching all donations:', error);
     res.status(500).json({ message: 'Failed to fetch all donations' });
   }
 };

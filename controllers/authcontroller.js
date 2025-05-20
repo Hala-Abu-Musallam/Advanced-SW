@@ -23,13 +23,11 @@ exports.login = async (req, res) => {
             return res.status(401).json({ success: false, message: 'Invalid username or password' });
         }
 
-        // تحقق من كلمة المرور
         const match = await bcrypt.compare(password, user.password);
         if (!match) {
             return res.status(401).json({ success: false, message: 'Invalid username or password' });
         }
 
-        // جلب الدور من جدول userroles
         const roles = await sequelize.query(
             'SELECT role_name FROM userroles WHERE username = ?',
             {

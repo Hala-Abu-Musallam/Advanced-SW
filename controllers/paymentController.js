@@ -12,14 +12,14 @@ exports.handleWebhook = (req, res) => {
       process.env.STRIPE_WEBHOOK_SECRET
     );
   } catch (err) {
-    console.error('⚠️ Webhook signature verification failed.', err);
+    console.error(' Webhook signature verification failed.', err);
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
   switch (event.type) {
     case 'payment_intent.succeeded':
       const paymentIntent = event.data.object;
-      console.log('✅ Payment succeeded:', paymentIntent.id);
+      console.log('Payment succeeded:', paymentIntent.id);
       Payment.update(
         { status: 'completed' },
         { where: { stripe_payment_id: paymentIntent.id } }
@@ -28,7 +28,7 @@ exports.handleWebhook = (req, res) => {
 
     case 'payment_intent.payment_failed':
       const failedIntent = event.data.object;
-      console.log('❌ Payment failed:', failedIntent.id);
+      console.log(' Payment failed:', failedIntent.id);
       Payment.update(
         { status: 'failed' },
         { where: { stripe_payment_id: failedIntent.id } }
