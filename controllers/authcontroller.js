@@ -4,12 +4,12 @@ const sequelize = require('../database');
 const saltRounds = 10;
 const JWT_SECRET = process.env.JWT_SECRET || '2002';
 
-// تسجيل الدخول
+
 exports.login = async (req, res) => {
     const { username, password } = req.body;
 
     try {
-        // جلب المستخدم
+
         const users = await sequelize.query(
             'SELECT * FROM users WHERE username = ?',
             {
@@ -40,7 +40,6 @@ exports.login = async (req, res) => {
 
         const role = roles.length > 0 ? roles[0].role_name : null;
 
-        // إنشاء التوكن
         const token = jwt.sign(
             {
                 ID: user.ID,
@@ -69,7 +68,6 @@ exports.login = async (req, res) => {
     }
 };
 
-// التسجيل
 exports.signup = async (req, res) => {
     const { username, email, password, role_name, description } = req.body;
 
@@ -93,7 +91,7 @@ exports.signup = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-        // إضافة المستخدم
+ 
         await sequelize.query(
             'INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
             {
@@ -102,7 +100,7 @@ exports.signup = async (req, res) => {
             }
         );
 
-        // إضافة الدور للمستخدم
+ 
         await sequelize.query(
             'INSERT INTO userroles (username, role_name, description) VALUES (?, ?, ?)',
             {
@@ -111,7 +109,7 @@ exports.signup = async (req, res) => {
             }
         );
 
-        // إنشاء التوكن بعد التسجيل
+
         const token = jwt.sign(
             {
                 username,

@@ -1,7 +1,6 @@
 const db = require('../models/donations');
 const Donation = db.Donations;
 
-// ✅ إجمالي الإيرادات
 exports.getTotalRevenue = async (req, res) => {
   try {
     const donations = await Donation.findAll();
@@ -22,31 +21,18 @@ exports.getTotalRevenue = async (req, res) => {
       fee_rate: '2%'
     });
   } catch (error) {
-    console.error('Error calculating revenue:', error.message);
-    res.status(500).json({
-      success: false,
-      message: 'Server error while calculating revenue.',
-      error: error.message
-    });
+    res.status(500).json({ success: false, message: 'Error calculating revenue' });
   }
 };
 
-// ✅ Breakdown (اختياري)
 exports.getRevenueBreakdown = async (req, res) => {
   try {
     const donations = await Donation.findAll({
       attributes: ['id', 'amount', 'platform_fee', 'category', 'created_at']
     });
 
-    res.status(200).json({
-      success: true,
-      data: donations
-    });
+    res.status(200).json({ success: true, data: donations });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Error fetching donation revenue breakdown.',
-      error: error.message
-    });
+    res.status(500).json({ success: false, message: 'Error fetching breakdown' });
   }
 };
