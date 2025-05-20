@@ -1,3 +1,4 @@
+// ✅ index.js (نسخة حلا مع الحفاظ على شغل الفريق)
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
@@ -10,24 +11,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Sequelize DB setup
-const db = require('./models');
-const sequelize = db.sequelize;
-
-sequelize.sync({ alter: true })
-  .then(() => {
-    console.log('📦 Models synced with DB');
-
-    // Start server
-    const PORT = process.env.PORT || 8081;
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running at http://localhost:${PORT}`);
-    });
-  })
-  .catch((err) => {
-    console.error('❌ DB sync failed:', err);
-  });
-
 // Route imports
 const authRoutes = require('./routes/authroutes');
 const adminRoutes = require('./routes/adminroutes');
@@ -37,6 +20,7 @@ const volunteerRoutes = require('./routes/volunteer');
 const notificationRoutes = require('./routes/notificationRoutes');
 const requestRoutes = require('./routes/requestRoutes');
 const logisticsRoutes = require('./routes/logisticsRoutes');
+
 // Use routes
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
@@ -57,3 +41,21 @@ app.use((err, req, res, next) => {
   console.error('❌ Error:', err.stack);
   res.status(500).json({ message: 'Internal Server Error' });
 });
+
+// Sequelize DB setup
+const db = require('./models');
+const sequelize = db.sequelize;
+
+sequelize.sync({ alter: true })
+  .then(() => {
+    console.log('📦 Models synced with DB');
+
+    // Start server
+    const PORT = process.env.PORT || 8081;
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running at http://localhost:${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error('❌ DB sync failed:', err);
+  });

@@ -1,6 +1,5 @@
 const sequelize = require('../database');
 
-
 exports.getAllUsers = async (req, res) => {
   try {
     const users = await sequelize.query(`
@@ -25,7 +24,6 @@ exports.getAllUsers = async (req, res) => {
     res.status(500).json({ message: 'Error fetching users' });
   }
 };
-
 
 exports.deleteUser = async (req, res) => {
   const { id } = req.params;
