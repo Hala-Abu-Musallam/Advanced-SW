@@ -2,11 +2,11 @@ const express = require('express');
 const router = express.Router();
 const revenueController = require('../controllers/revenuecontroller');
 
-// ✅ ميدلوير التحقق
+
 const { authenticateToken } = require('../middleware/authmiddleware');
 const verifyAdmin = require('../middleware/adminmiddleware');
 
-// ✅ فقط للإدمن
+
 router.get(
   '/revenue/total',
   authenticateToken,
