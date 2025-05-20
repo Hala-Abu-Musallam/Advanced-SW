@@ -20,6 +20,7 @@ const volunteerRoutes = require('./routes/volunteer');
 const notificationRoutes = require('./routes/notificationRoutes');
 const requestRoutes = require('./routes/requestRoutes');
 const logisticsRoutes = require('./routes/logisticsRoutes');
+const revenueRoutes = require('./routes/revenueroutes');
 
 // Use routes
 app.use('/api/auth', authRoutes);
@@ -30,6 +31,8 @@ app.use('/api/volunteers', volunteerRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/requests', requestRoutes);
 app.use('/api/logistics', logisticsRoutes);
+app.use('/api/info', revenueRoutes); 
+
 
 // Health check route
 app.get('/', (req, res) => {

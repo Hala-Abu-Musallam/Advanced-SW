@@ -1,5 +1,5 @@
-const db = require('../models/donations');
-const Donation = db.Donations;
+const Donation = require('../models/donations');
+
 
 exports.getTotalRevenue = async (req, res) => {
   try {

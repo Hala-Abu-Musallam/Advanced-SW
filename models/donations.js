@@ -46,12 +46,14 @@ const Donation = sequelize.define('Donations', {
 
   hooks: {
     beforeCreate: (donation) => {
-      const fee = parseFloat((donation.amount * 0.02).toFixed(2));
+      const amount = parseFloat(donation.amount || 0);
+      const fee = parseFloat((amount * 0.02).toFixed(2));
       donation.platform_fee = fee;
     }
   }
 });
 
+// علاقات الربط
 Donation.belongsTo(User, { foreignKey: 'user_id' });
 User.hasMany(Donation, { foreignKey: 'user_id' });
 

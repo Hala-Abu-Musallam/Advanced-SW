@@ -40,3 +40,31 @@ exports.deleteUser = async (req, res) => {
     res.status(500).json({ message: 'Error deleting user' });
   }
 };
+
+// عرض تقرير الشفافية الكامل
+exports.getTransparencyReport = async (req, res) => {
+  try {
+    const results = await sequelize.query(`
+      SELECT 
+        d.id AS donation_id,
+        u.username AS donor,
+        u.email,
+        d.type,
+        d.amount,
+        d.platform_fee,
+        d.category,
+        d.status,
+        DATE(d.created_at) AS date
+      FROM donations d
+      JOIN users u ON d.user_id = u.ID
+      ORDER BY d.created_at DESC
+    `, {
+      type: sequelize.QueryTypes.SELECT
+    });
+
+    res.status(200).json(results);
+  } catch (error) {
+    console.error('❌ Transparency fetch error:', error.message);
+    res.status(500).json({ message: 'Failed to fetch transparency report' });
+  }
+};
