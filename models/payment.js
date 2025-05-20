@@ -44,10 +44,10 @@ const Payment = sequelize.define('Payment', {
       msg: 'Stripe payment ID must be unique'
     }
   },
-  status: {
-    type: DataTypes.ENUM('pending', 'completed', 'failed', 'refunded'),
-    defaultValue: 'pending'
-  }
+status: {
+  type: DataTypes.STRING(50), 
+  defaultValue: 'pending'
+}
 }, {
   tableName: 'payments',
   timestamps: true

@@ -1,6 +1,7 @@
 const Payment = require('../models/payment');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const sequelize = require('../database');
+
 exports.handleWebhook = (req, res) => {
   const sig = req.headers['stripe-signature'];
   let event;
@@ -17,7 +18,7 @@ exports.handleWebhook = (req, res) => {
   }
 
   switch (event.type) {
-    case 'payment_intent.succeeded':
+    case 'payment_intent.succeeded': {
       const paymentIntent = event.data.object;
       console.log('Payment succeeded:', paymentIntent.id);
       Payment.update(
@@ -25,15 +26,17 @@ exports.handleWebhook = (req, res) => {
         { where: { stripe_payment_id: paymentIntent.id } }
       );
       break;
+    }
 
-    case 'payment_intent.payment_failed':
+    case 'payment_intent.payment_failed': {
       const failedIntent = event.data.object;
-      console.log(' Payment failed:', failedIntent.id);
+      console.log('Payment failed:', failedIntent.id);
       Payment.update(
         { status: 'failed' },
         { where: { stripe_payment_id: failedIntent.id } }
       );
       break;
+    }
 
     default:
       console.log(`Unhandled event type ${event.type}`);
@@ -42,38 +45,44 @@ exports.handleWebhook = (req, res) => {
   res.json({ received: true });
 };
 
-
-exports.createPaymentIntent = async (req, res) => {
-  const { amount, currency, payment_method } = req.body;
-
+exports.createPaymentAndSave = async (req, res) => {
   try {
+    const { amount, currency, payment_method } = req.body;
+
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(amount * 100),
-      currency: currency || 'usd',
-      payment_method: payment_method || 'pm_card_visa',
+      amount: amount * 100,
+      currency,
+      payment_method,
       confirm: true,
-      return_url: `${process.env.FRONTEND_URL}/payment-complete`,
+      automatic_payment_methods: {
+        enabled: true,
+        allow_redirects: 'never'
+      }
+    });
+
+    const saved = await Payment.create({
+      user_id: req.user.ID,
+      amount,
+      currency,
+      stripe_payment_id: paymentIntent.id,
+      status: paymentIntent.status
     });
 
     res.status(200).json({
       success: true,
+      message: 'Payment created and saved successfully',
       paymentIntent
     });
   } catch (error) {
-    console.error('Stripe Error (Intent):', error);
-    res.status(500).json({
-      success: false,
-      message: error.raw?.message || 'Failed to create intent',
-      error: process.env.NODE_ENV === 'development' ? error.message : undefined
-    });
+    console.error('Payment error:', error);
+    res.status(500).json({ success: false, error: error.message });
   }
 };
-
 
 exports.getPayments = async (req, res) => {
   try {
     const payments = await Payment.findAll({
-      where: { user_id: req.user.ID } 
+      where: { user_id: req.user.ID }
     });
 
     res.json({ success: true, data: payments });
@@ -86,7 +95,6 @@ exports.getPayments = async (req, res) => {
   }
 };
 
-
 exports.updatePayment = async (req, res) => {
   try {
     const { amount, currency, status } = req.body;
@@ -96,9 +104,9 @@ exports.updatePayment = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Payment not found' });
     }
 
-    payment.amount = amount || payment.amount;
-    payment.currency = currency || payment.currency;
-    payment.status = status || payment.status;
+    payment.amount = amount ?? payment.amount;
+    payment.currency = currency ?? payment.currency;
+    payment.status = status ?? payment.status;
 
     await payment.save();
 
@@ -134,7 +142,7 @@ exports.getPaymentStats = async (req, res) => {
   try {
     const stats = await Payment.findAll({
       attributes: [
-        [sequelize.fn('COUNT', sequelize.col('ID')), 'total_payments'],
+        [sequelize.fn('COUNT', sequelize.col('id')), 'total_payments'],
         [sequelize.fn('SUM', sequelize.col('amount')), 'total_amount'],
         [sequelize.literal('COUNT(CASE WHEN status = "completed" THEN 1 END)'), 'completed_payments']
       ],

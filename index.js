@@ -18,6 +18,9 @@ const notificationRoutes = require('./routes/notificationRoutes');
 const requestRoutes = require('./routes/requestRoutes');
 const logisticsRoutes = require('./routes/logisticsRoutes');
 const revenueRoutes = require('./routes/revenueroutes');
+const paymentRoutes = require('./routes/paymentRoutes');
+const orphanRoutes = require('./routes/orphanRoutes');
+const emergencyRoutes = require('./routes/emergencyRoutes');  
 
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
@@ -28,6 +31,9 @@ app.use('/api/notifications', notificationRoutes);
 app.use('/api/requests', requestRoutes);
 app.use('/api/logistics', logisticsRoutes);
 app.use('/api/info', revenueRoutes); 
+app.use('/api/payments', paymentRoutes);
+app.use('/api', orphanRoutes);
+app.use('/api/emergency-campaigns', emergencyRoutes); 
 
 
 app.get('/', (req, res) => {
