@@ -2,7 +2,7 @@
 const db = require('../models/donations');
 const Donation = db.Donations;
 
-// عرض كل الإيرادات بشكل مجمع
+
 exports.getTotalRevenue = async (req, res) => {
   try {
     const donations = await Donation.findAll();
@@ -32,7 +32,7 @@ exports.getTotalRevenue = async (req, res) => {
   }
 };
 
-// (اختياري) عرض كل التبرعات مع الإيرادات
+
 exports.getRevenueBreakdown = async (req, res) => {
   try {
     const donations = await Donation.findAll({
